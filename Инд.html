@@ -1,0 +1,2362 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шахматные дебюты для начинающих - Интерактивное обучение</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Основные стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-bottom: 5px solid #e67e22;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .chess-icon {
+            color: #e67e22;
+            margin-right: 10px;
+        }
+        
+        nav {
+            background-color: #34495e;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+        
+        .nav-item.active {
+            background-color: #e67e22;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .intro {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .intro h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f1f1;
+        }
+        
+        .debut-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .debut-section h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .debut-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        @media (max-width: 768px) {
+            .debut-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .debut-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid #e67e22;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .debut-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .debut-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+        
+        .debut-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .debut-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .debut-moves {
+            font-family: 'Courier New', monospace;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .debut-tips {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 40px; 
+            border-left: 3px solid #ffc107;
+            clear: both;
+        }
+        
+        .debut-tips h4 {
+            color: #e67e22;
+            margin-bottom: 8px;
+        }
+        
+        .practice-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+        
+        .practice-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .practice-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #d35400;
+        }
+        
+        button.secondary {
+            background-color: #3498db;
+        }
+        
+        button.secondary:hover {
+            background-color: #2980b9;
+        }
+        
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        
+        .highlight {
+            color: #e67e22;
+            font-weight: bold;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #e67e22;
+        }
+        
+        .quote-author {
+            text-align: right;
+            margin-top: 10px;
+            color: #7f8c8d;
+        }
+        
+        /* Стили для интерактивной шахматной доски (главная страница) */
+        .chess-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        @media (min-width: 992px) {
+            .chess-area {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+        
+        .board-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .chess-board-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .board-labels {
+            position: absolute;
+            display: flex;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .board-labels.vertical {
+            flex-direction: column;
+            left: -20px;
+            top: 0;
+            height: 100%;
+            justify-content: space-around;
+            align-items: center;
+            width: 20px;
+        }
+        
+        .board-labels.horizontal {
+            bottom: -25px;
+            left: 0;
+            width: 100%;
+            justify-content: space-around;
+            padding-left: 25px;
+        }
+        
+        .chess-board {
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid #2c3e50;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-left: 0;
+            margin-bottom: 25px;
+        }
+        
+        .chess-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .static-chess-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            user-select: none;
+        }
+        
+        .light {
+            background-color: #b58863;
+        }
+        
+        .dark {
+            background-color: #f0d9b5;
+        }
+        
+        .selected {
+            background-color: rgba(52, 152, 219, 0.5) !important;
+        }
+        
+        .last-move {
+            background-color: rgba(241, 196, 15, 0.5) !important;
+        }
+        
+        .move-history {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .move-history h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .moves-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .move-number {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .move {
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .challenge-area {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f4f8;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .challenge-area h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .video-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+        
+        .video-section h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .video-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e9ecef;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            background-color: #2c3e50;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+        
+        .video-thumbnail iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+        
+        .video-play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(231, 126, 34, 0.9);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        .video-info {
+            padding: 20px;
+        }
+        
+        .video-info h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .video-duration {
+            display: inline-block;
+            background-color: #2c3e50;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+        
+        .status-message {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .board-instruction {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #666;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .cell-border {
+            border: 1px solid transparent;
+        }
+        
+        .back-button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Стили для страницы теории */
+        .theory-section {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .theory-section h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e67e22;
+            display: flex;
+            align-items: center;
+        }
+        
+        .debut-variants {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .variant {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .variant h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .variant-moves {
+            font-family: 'Courier New', monospace;
+            background-color: #e9ecef;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #2c3e50;
+            border-left: 3px solid #e67e22;
+        }
+        
+        .variant-description {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .debut-plan {
+            background-color: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .debut-plan h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .plan-list {
+            margin-left: 20px;
+        }
+        
+        .plan-list li {
+            margin-bottom: 8px;
+        }
+        
+        .debut-trap {
+            background-color: #ffeaea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .debut-trap h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .theory-navigation {
+            position: sticky;
+            top: 90px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            z-index: 50;
+        }
+        
+        .theory-navigation h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .theory-nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .theory-nav-link {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .theory-nav-link:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .notation-explanation {
+            background-color: #fff8e1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .notation-explanation h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .notation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .notation-table th, .notation-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .notation-table th {
+            background-color: #f2f2f2;
+            color: #2c3e50;
+        }
+        
+        .notation-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .gambit-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ffeaa7;
+            margin: 15px 0;
+            font-size: 0.95rem;
+        }
+        
+        /* ===== СТИЛИ ДЛЯ СТАТИЧЕСКИХ ДОСОК НА ГЛАВНОЙ СТРАНИЦЕ ===== */
+        .main-board-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 200px;
+            margin: 15px 0;
+            display: inline-block;
+            z-index: 1;
+            margin-left: 30px;
+        }
+        
+        .main-board-wrapper .static-board-labels-vertical {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            left: -35px;
+            top: 0;
+            height: 100%;
+            justify-content: space-around;
+            align-items: center;
+            width: 30px;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 12px;
+            z-index: 2;
+        }
+        
+        .main-board-wrapper .static-board-labels-horizontal {
+            position: absolute;
+            display: flex;
+            bottom: -35px; /* ОПУЩЕНО с -30px до -35px */
+            left: 0;
+            width: 100%;
+            justify-content: space-around;
+            padding-left: 30px;
+            padding-right: 30px;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 12px;
+            letter-spacing: 24px;
+            z-index: 2;
+        }
+        
+        .main-board-wrapper .static-board-labels-horizontal span {
+            margin: 0 1px;
+        }
+        
+        .main-board-wrapper .debut-static-board {
+            width: 100%;
+            max-width: 200px;
+            border: 2px solid #2c3e50;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            margin-left: 0;
+        }
+        
+        /* ===== СТИЛИ ДЛЯ СТАТИЧЕСКИХ ДОСОК В ПОДРОБНОЙ ТЕОРИИ ===== */
+        .theory-board-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 15px auto;
+            display: inline-block;
+            z-index: 1;
+        }
+        
+        .theory-board-wrapper .static-board-labels-vertical {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            left: -45px;
+            top: 0;
+            height: 100%;
+            justify-content: space-around;
+            align-items: center;
+            width: 40px;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 14px;
+            z-index: 2;
+        }
+        
+        .theory-board-wrapper .static-board-labels-horizontal {
+            position: absolute;
+            display: flex;
+            bottom: -39px; 
+            left: -5px;
+            width: calc(100% + 10px);
+            justify-content: space-around;
+            padding-left: 35px;
+            padding-right: 35px;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 14px;
+            letter-spacing: 20px;
+            z-index: 2;
+        }
+        
+        .theory-board-wrapper .static-board-labels-horizontal span {
+            margin: 0 8px;
+        }
+        
+        .theory-board-wrapper .static-chess-board {
+            width: 100%;
+            max-width: 300px;
+            border: 2px solid #2c3e50;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+        
+        /* Общие стили */
+        .board-title-small {
+            text-align: center;
+            font-weight: bold;
+            margin: 10px 0 5px;
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+        
+        .board-title {
+            text-align: center;
+            font-weight: bold;
+            margin: 5px 0;
+            color: #2c3e50;
+        }
+        
+        .board-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        .debut-static-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            user-select: none;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .move-piece-icon {
+            margin-right: 5px;
+            display: inline-block;
+            font-size: 1.1rem;
+        }
+        
+        .move-detail {
+            display: inline-flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-chess-knight chess-icon"></i>Шахматные дебюты для начинающих</h1>
+            <p>Интерактивное обучение основным шахматным дебютам. Практикуйтесь прямо на сайте!</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="nav-item active" data-page="main"><i class="fas fa-home"></i> Главная</a>
+            <a href="#" class="nav-item" data-page="theory"><i class="fas fa-book"></i> Подробная теория</a>
+            <a href="#" class="nav-item" data-page="videos"><i class="fas fa-video"></i> Видеоуроки</a>
+        </div>
+    </nav>
+    
+    <!-- Главная страница -->
+    <div class="container page active" id="mainPage">
+        <div class="intro">
+            <h2>Что такое шахматный дебют и зачем его изучать?</h2>
+            <p>Дебют — начальная стадия шахматной партии, обычно первые 10-15 ходов. Изучение дебютов помогает:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>Быстрее развивать фигуры</li>
+                <li>Контролировать центр доски</li>
+                <li>Обеспечивать безопасность короля</li>
+                <li>Избегать типичных ловушек в начале партии</li>
+                <li>Получать преимущество уже в начале игры</li>
+            </ul>
+            
+            <div class="quote">
+                "Хороший дебют — это половина победы"
+                <div class="quote-author">— Шахматная мудрость</div>
+            </div>
+        </div>
+        
+        <section id="debuts" class="debut-section">
+            <h2><i class="fas fa-chess-king chess-icon"></i> Основные шахматные дебюты</h2>
+            <p>Изучите самые популярные дебюты для начинающих:</p>
+            
+            <div class="debut-grid">
+                <!-- Итальянская партия -->
+                <div class="debut-card">
+                    <div class="debut-header">
+                        <h3>Итальянская партия</h3>
+                    </div>
+                    <div class="debut-body">
+                        <p>Один из старейших дебютов, направленный на быстрое развитие фигур и контроль центра.</p>
+                        <div class="debut-moves">1.e4 e5 2.♘f3 ♘c6 3.♗c4</div>
+                        <div class="board-title-small">Позиция после 3.♗c4:</div>
+                        <div class="main-board-wrapper">
+                            <div class="static-board-labels-vertical">
+                                <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                            </div>
+                            <div class="static-board-labels-horizontal">
+                                <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                            </div>
+                            <div class="debut-static-board" id="main-italian-board"></div>
+                        </div>
+                        <div class="debut-tips">
+                            <h4><i class="fas fa-lightbulb"></i> Ключевые идеи:</h4>
+                            <p>Атака на слабую точку f7, быстрое развитие слонов и коней, подготовка к рокировке.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Сицилианская защита -->
+                <div class="debut-card">
+                    <div class="debut-header">
+                        <h3>Сицилианская защита</h3>
+                    </div>
+                    <div class="debut-body">
+                        <p>Самый популярный ответ на 1.e4. Приводит к асимметричным, динамичным позициям.</p>
+                        <div class="debut-moves">1.e4 c5</div>
+                        <div class="board-title-small">Позиция после 1...c5:</div>
+                        <div class="main-board-wrapper">
+                            <div class="static-board-labels-vertical">
+                                <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                            </div>
+                            <div class="static-board-labels-horizontal">
+                                <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                            </div>
+                            <div class="debut-static-board" id="main-sicilian-board"></div>
+                        </div>
+                        <div class="debut-tips">
+                            <h4><i class="fas fa-lightbulb"></i> Ключевые идеи:</h4>
+                            <p>Контроль над полем d4, контригра на ферзевом фланге, создание несбалансированной позиции.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ферзевый гамбит -->
+                <div class="debut-card">
+                    <div class="debut-header">
+                        <h3>Ферзевый гамбит</h3>
+                    </div>
+                    <div class="debut-body">
+                        <p>Классический дебют, начинающийся с ходов 1.d4 d5 2.c4. Один из самых популярных дебютов.</p>
+                        <div class="debut-moves">1.d4 d5 2.c4</div>
+                        <div class="board-title-small">Позиция после 2.c4:</div>
+                        <div class="main-board-wrapper">
+                            <div class="static-board-labels-vertical">
+                                <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                            </div>
+                            <div class="static-board-labels-horizontal">
+                                <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                            </div>
+                            <div class="debut-static-board" id="main-queen-gambit-board"></div>
+                        </div>
+                        <div class="debut-tips">
+                            <h4><i class="fas fa-lightbulb"></i> Ключевые идеи:</h4>
+                            <p>Борьба за центр, создание пешечного превосходства в центре, развитие легких фигур.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Защита Каро-Канн -->
+                <div class="debut-card">
+                    <div class="debut-header">
+                        <h3>Защита Каро-Канн</h3>
+                    </div>
+                    <div class="debut-body">
+                        <p>Надежный дебют за черных против 1.e4. Избегает острых вариантов и ведет к солидным позициям.</p>
+                        <div class="debut-moves">1.e4 c6</div>
+                        <div class="board-title-small">Позиция после 1...c6:</div>
+                        <div class="main-board-wrapper">
+                            <div class="static-board-labels-vertical">
+                                <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                            </div>
+                            <div class="static-board-labels-horizontal">
+                                <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                            </div>
+                            <div class="debut-static-board" id="main-caro-kann-board"></div>
+                        </div>
+                        <div class="debut-tips">
+                            <h4><i class="fas fa-lightbulb"></i> Ключевые идеи:</h4>
+                            <p>Подготовка d5, избегание острых гамбитов, гибкая пешечная структура.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Французская защита -->
+                <div class="debut-card">
+                    <div class="debut-header">
+                        <h3>Французская защита</h3>
+                    </div>
+                    <div class="debut-body">
+                        <p>Популярный дебют за черных против 1.e4. Черные стремятся контролировать центр своими пешками.</p>
+                        <div class="debut-moves">1.e4 e6</div>
+                        <div class="board-title-small">Позиция после 1...e6:</div>
+                        <div class="main-board-wrapper">
+                            <div class="static-board-labels-vertical">
+                                <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                            </div>
+                            <div class="static-board-labels-horizontal">
+                                <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                            </div>
+                            <div class="debut-static-board" id="main-french-board"></div>
+                        </div>
+                        <div class="debut-tips">
+                            <h4><i class="fas fa-lightbulb"></i> Ключевые идеи:</h4>
+                            <p>Создание прочного пешечного центра, борьба за поля d4 и e5, контригра на ферзевом фланге.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Шотландская партия -->
+                <div class="debut-card">
+                    <div class="debut-header">
+                        <h3>Шотландская партия</h3>
+                    </div>
+                    <div class="debut-body">
+                        <p>Простой и понятный дебют для белых, ведущий к открытым позициям с быстрым развитием фигур.</p>
+                        <div class="debut-moves">1.e4 e5 2.♘f3 ♘c6 3.d4</div>
+                        <div class="board-title-small">Позиция после 3.d4:</div>
+                        <div class="main-board-wrapper">
+                            <div class="static-board-labels-vertical">
+                                <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                            </div>
+                            <div class="static-board-labels-horizontal">
+                                <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                            </div>
+                            <div class="debut-static-board" id="main-scotch-board"></div>
+                        </div>
+                        <div class="debut-tips">
+                            <h4><i class="fas fa-lightbulb"></i> Ключевые идеи:</h4>
+                            <p>Немедленная борьба за центр, открытие линий для фигур, простые и понятные планы игры.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="practice" class="practice-section">
+            <h2><i class="fas fa-puzzle-piece chess-icon"></i> Интерактивная практика дебютов</h2>
+            <p>Потренируйтесь в разыгрывании основных дебютных схем. Перемещайте фигуры, кликая на них!</p>
+            
+            <div class="board-instruction">
+                Кликните на фигуру, затем на клетку, куда хотите её переместить
+            </div>
+            
+            <div class="chess-area">
+                <div class="board-container">
+                    <div class="chess-board-wrapper">
+                        <div class="board-labels vertical">
+                            <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                        </div>
+                        <div class="board-labels horizontal">
+                            <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                        </div>
+                        <div class="chess-board" id="chessBoard"></div>
+                    </div>
+                    
+                    <div class="practice-controls">
+                        <button id="resetBtn"><i class="fas fa-redo"></i> Новая игра</button>
+                        <button id="hintBtn" class="secondary"><i class="fas fa-lightbulb"></i> Подсказка</button>
+                        <button id="checkBtn" class="secondary"><i class="fas fa-check"></i> Проверить дебют</button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message" style="display: none;"></div>
+                </div>
+                
+                <div class="move-history">
+                    <h3>История ходов</h3>
+                    <div class="moves-list" id="movesList"></div>
+                </div>
+            </div>
+            
+            <div class="challenge-area">
+                <h3><i class="fas fa-flag-checkered"></i> Практические задания</h3>
+                <p>Попробуйте расставить на доске следующие дебюты:</p>
+                <div style="margin-top: 15px;">
+                    <button class="secondary" data-debut="italian"><i class="fas fa-chess-pawn"></i> Итальянская партия</button>
+                    <button class="secondary" data-debut="sicilian"><i class="fas fa-shield-alt"></i> Сицилианская защита</button>
+                    <button class="secondary" data-debut="queen_gambit"><i class="fas fa-chess-queen"></i> Ферзевый гамбит</button>
+                    <button class="secondary" data-debut="caro_kann"><i class="fas fa-chess-rook"></i> Защита Каро-Канн</button>
+                    <button class="secondary" data-debut="french"><i class="fas fa-chess-bishop"></i> Французская защита</button>
+                    <button class="secondary" data-debut="scotch"><i class="fas fa-chess-knight"></i> Шотландская партия</button>
+                </div>
+                <p id="challengeDescription" style="margin-top: 15px; font-style: italic; color: #666;"></p>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Страница с видеоуроками -->
+    <div class="container page" id="videosPage">
+        <section class="video-section">
+            <h2><i class="fas fa-video chess-icon"></i> Видеоуроки по шахматным дебютам</h2>
+            <p>Подробные видеоуроки с разборами дебютов:</p>
+            
+            <div class="video-grid">
+                <div class="video-card" onclick="window.open('https://vkvideo.ru/video_ext.php?oid=-160039985&id=456241293&hd=3', '_blank')">
+                    <div class="video-thumbnail">
+                        <iframe src="https://vkvideo.ru/video_ext.php?oid=-160039985&id=456241293&hd=3" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"></iframe>
+                        <div class="video-play"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Итальянская партия для начинающих</h4>
+                        <p>Полный разбор классического дебюта</p>
+                        <span class="video-duration">29 минут 5 секунд</span>
+                    </div>
+                </div>
+                
+                <div class="video-card" onclick="window.open('https://vkvideo.ru/video_ext.php?oid=-31534027&id=456239284&hd=3', '_blank')">
+                    <div class="video-thumbnail">
+                        <iframe src="https://vkvideo.ru/video_ext.php?oid=-31534027&id=456239284&hd=3" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"></iframe>
+                        <div class="video-play"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Сицилианская защита: основные варианты</h4>
+                        <p>Вариант Найдорфа, Дракон и классика</p>
+                        <span class="video-duration">41 минута 20 секунд</span>
+                    </div>
+                </div>
+                
+                <div class="video-card" onclick="window.open('https://vkvideo.ru/video_ext.php?oid=-222625793&id=456239028&hd=3', '_blank')">
+                    <div class="video-thumbnail">
+                        <iframe src="https://vkvideo.ru/video_ext.php?oid=-222625793&id=456239028&hd=3" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"></iframe>
+                        <div class="video-play"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Ферзевый гамбит: принятый и отказанный</h4>
+                        <p>Основные идеи и планы сторон</p>
+                        <span class="video-duration">17 минут 46 секунд</span>
+                    </div>
+                </div>
+                
+                <div class="video-card" onclick="window.open('https://vkvideo.ru/video_ext.php?oid=-232403514&id=456239029&hd=3', '_blank')">
+                    <div class="video-thumbnail">
+                        <iframe src="https://vkvideo.ru/video_ext.php?oid=-232403514&id=456239029&hd=3" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"></iframe>
+                        <div class="video-play"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Защита Каро-Канн: надёжный выбор</h4>
+                        <p>Классическая система и современные идеи</p>
+                        <span class="video-duration">12 минут 13 секунд</span>
+                    </div>
+                </div>
+                
+                <div class="video-card" onclick="window.open('https://vkvideo.ru/video_ext.php?oid=-214696121&id=456239234&hd=3', '_blank')">
+                    <div class="video-thumbnail">
+                        <iframe src="https://vkvideo.ru/video_ext.php?oid=-214696121&id=456239234&hd=3" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"></iframe>
+                        <div class="video-play"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Французская защита: стратегия и тактика</h4>
+                        <p>Атака и защита в французской партии</p>
+                        <span class="video-duration">28 минут 34 секунды</span>
+                    </div>
+                </div>
+                
+                <div class="video-card" onclick="window.open('https://vkvideo.ru/video_ext.php?oid=-131189523&id=456239034&hd=3', '_blank')">
+                    <div class="video-thumbnail">
+                        <iframe src="https://vkvideo.ru/video_ext.php?oid=-131189523&id=456239034&hd=3" allow="autoplay; encrypted-media; fullscreen; picture-in-picture;" frameborder="0"></iframe>
+                        <div class="video-play"><i class="fas fa-play"></i></div>
+                    </div>
+                    <div class="video-info">
+                        <h4>Шотландская партия: быстрая игра в центре</h4>
+                        <p>Разбор активных вариантов</p>
+                        <span class="video-duration">24 минуты 19 секунд</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Страница с подробной теорией -->
+    <div class="container page" id="theoryPage">
+        <section class="intro">
+            <h2><i class="fas fa-book-open chess-icon"></i> Подробная теория шахматных дебютов</h2>
+            <p>На этой странице представлены полные варианты основных шахматных дебютов с объяснениями стратегических идей, типичных планов и ловушек.</p>
+            
+            <div class="notation-explanation">
+                <h4><i class="fas fa-info-circle"></i> Обозначения в шахматной нотации</h4>
+                <p>В теории используются стандартные шахматные обозначения:</p>
+                <table class="notation-table">
+                    <tr><th>Обозначение</th><th>Значение</th><th>Пример</th></tr>
+                    <tr><td>♔/♚</td><td>Король</td><td>♔e1 - король на e1</td></tr>
+                    <tr><td>♕/♛</td><td>Ферзь</td><td>♕d2 - ферзь на d2</td></tr>
+                    <tr><td>♖/♜</td><td>Ладья</td><td>♖a1 - ладья на a1</td></tr>
+                    <tr><td>♗/♝</td><td>Слон</td><td>♗c4 - слон на c4</td></tr>
+                    <tr><td>♘/♞</td><td>Конь</td><td>♘f3 - конь на f3</td></tr>
+                    <tr><td>♙/♟</td><td>Пешка</td><td>e4 - пешка на e4</td></tr>
+                    <tr><td>0-0</td><td>Короткая рокировка</td><td>0-0 - короткая рокировка</td></tr>
+                    <tr><td>0-0-0</td><td>Длинная рокировка</td><td>0-0-0 - длинная рокировка</td></tr>
+                    <tr><td>+</td><td>Шах</td><td>♕h5+ - шах ферзем на h5</td></tr>
+                    <tr><td>#</td><td>Мат</td><td>♕f7# - мат ферзем на f7</td></tr>
+                    <tr><td>x</td><td>Взятие</td><td>♗xf7+ - слон берет на f7 с шахом</td></tr>
+                </table>
+            </div>
+        </section>
+        
+        <div class="theory-navigation">
+            <h3><i class="fas fa-list"></i> Навигация по дебютам</h3>
+            <p>Быстро перейдите к нужному дебюту:</p>
+            <div class="theory-nav-links">
+                <a href="#italian" class="theory-nav-link">Итальянская партия</a>
+                <a href="#sicilian" class="theory-nav-link">Сицилианская защита</a>
+                <a href="#queen_gambit" class="theory-nav-link">Ферзевый гамбит</a>
+                <a href="#caro_kann" class="theory-nav-link">Защита Каро-Канн</a>
+                <a href="#french" class="theory-nav-link">Французская защита</a>
+                <a href="#scotch" class="theory-nav-link">Шотландская партия</a>
+            </div>
+        </div>
+        
+        <!-- Итальянская партия -->
+        <section id="italian" class="theory-section">
+            <h2><i class="fas fa-chess-king"></i> Итальянская партия</h2>
+            <p>Один из старейших дебютов, возникший в 16 веке. Направлен на быстрое развитие фигур, контроль центра и атаку на слабую точку f7.</p>
+            
+            <div class="debut-variants">
+                <h3>Основные варианты</h3>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Классический вариант (Джоко-пиано)</h4>
+                    <div class="variant-moves">1.e4 e5 2.♘f3 ♘c6 3.♗c4 ♗c5</div>
+                    <div class="variant-description">
+                        <p>Классическое развитие обоих слонов. Белые готовят d4, черные защищаются.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 3...♗c5</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-italian-classical"></div>
+                                </div>
+                                <div class="board-caption">Классическая позиция итальянской партии</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Гамбит Эванса</h4>
+                    <div class="variant-moves">1.e4 e5 2.♘f3 ♘c6 3.♗c4 ♗c5 4.b4</div>
+                    <div class="variant-description">
+                        <p>Острый гамбит, где белые жертвуют пешку для быстрой мобилизации фигур и атаки.</p>
+                        <div class="gambit-warning">
+                            <i class="fas fa-exclamation-triangle"></i> <strong>Внимание:</strong> Гамбитный вариант требует точной игры от обеих сторон.
+                        </div>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 4.b4</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-italian-evans"></div>
+                                </div>
+                                <div class="board-caption">Гамбит Эванса - белые жертвуют пешку b4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Защита двух коней</h4>
+                    <div class="variant-moves">1.e4 e5 2.♘f3 ♘c6 3.♗c4 ♘f6</div>
+                    <div class="variant-description">
+                        <p>Черные сразу атакуют пешку e4, создавая напряжение в центре.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 3...♘f6</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-italian-two-knights"></div>
+                                </div>
+                                <div class="board-caption">Защита двух коней</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="debut-plan">
+                <h4><i class="fas fa-chess-board"></i> Стратегические идеи для белых</h4>
+                <ul class="plan-list">
+                    <li>Быстрое развитие слонов и коней</li>
+                    <li>Контроль центра полей d4 и e5</li>
+                    <li>Атака на слабую точку f7 (♗c4 + ♕f3)</li>
+                    <li>Подготовка к рокировке на королевский фланг</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Сицилианская защита -->
+        <section id="sicilian" class="theory-section">
+            <h2><i class="fas fa-shield-alt"></i> Сицилианская защита</h2>
+            <p>Самый популярный ответ на 1.e4 в современной практике. Приводит к асимметричным, динамичным позициям с контригрой черных.</p>
+            
+            <div class="debut-variants">
+                <h3>Основные системы и варианты</h3>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Вариант Найдорфа</h4>
+                    <div class="variant-moves">1.e4 c5 2.♘f3 d6 3.d4 cxd4 4.♘xd4 ♘f6 5.♘c3 a6</div>
+                    <div class="variant-description">
+                        <p>Самый популярный вариант сицилианской защиты. Черные готовят b5 и контригру на ферзевом фланге.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 5...a6</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-sicilian-najdorf"></div>
+                                </div>
+                                <div class="board-caption">Характерная позиция варианта Найдорфа</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Схема Дракона</h4>
+                    <div class="variant-moves">1.e4 c5 2.♘f3 d6 3.d4 cxd4 4.♘xd4 ♘f6 5.♘c3 g6</div>
+                    <div class="variant-description">
+                        <p>Острый вариант с фианкеттированием слона на g7. Приводит к обоюдоострым позициям.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 5...g6</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-sicilian-dragon"></div>
+                                </div>
+                                <div class="board-caption">Схема Дракона - черные готовят ♝g7</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Классическая система</h4>
+                    <div class="variant-moves">1.e4 c5 2.♘f3 d6 3.d4 cxd4 4.♘xd4 ♘f6 5.♘c3 ♘c6</div>
+                    <div class="variant-description">
+                        <p>Более спокойный вариант с развитием коня на c6 вместо a6.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 5...♘c6</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-sicilian-classical"></div>
+                                </div>
+                                <div class="board-caption">Классическая система сицилианской защиты</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="debut-plan">
+                <h4><i class="fas fa-chess-board"></i> Стратегические идеи для черных</h4>
+                <ul class="plan-list">
+                    <li>Контроль над полем d4 пешкой c5</li>
+                    <li>Контригра на ферзевом фланге (a6, b5, ♝b7)</li>
+                    <li>В варианте Найдорфа - подготовка к e5 или b5</li>
+                    <li>В драконе - давление по большой диагонали a1-h8</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Ферзевый гамбит -->
+        <section id="queen_gambit" class="theory-section">
+            <h2><i class="fas fa-chess-queen"></i> Ферзевый гамбит</h2>
+            <p>Один из самых фундаментальных дебютов в шахматах. Начинается с ходов 1.d4 d5 2.c4.</p>
+            
+            <div class="debut-variants">
+                <h3>Основные варианты</h3>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Отказанный ферзевый гамбит</h4>
+                    <div class="variant-moves">1.d4 d5 2.c4 e6</div>
+                    <div class="variant-description">
+                        <p>Черные не принимают жертву пешки, а укрепляют центр.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 2...e6</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-qg-declined"></div>
+                                </div>
+                                <div class="board-caption">Отказанный ферзевый гамбит</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Принятый ферзевый гамбит</h4>
+                    <div class="variant-moves">1.d4 d5 2.c4 dxc4</div>
+                    <div class="variant-description">
+                        <p>Черные принимают жертву пешки, но должны быть готовы вернуть материал.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 2...dxc4</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-qg-accepted"></div>
+                                </div>
+                                <div class="board-caption">Принятый ферзевый гамбит</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Славянская защита</h4>
+                    <div class="variant-moves">1.d4 d5 2.c4 c6</div>
+                    <div class="variant-description">
+                        <p>Солидная система черных с c6, поддерживающая центр.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 2...c6</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-slavic"></div>
+                                </div>
+                                <div class="board-caption">Славянская защита - черные играют c6</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="debut-plan">
+                <h4><i class="fas fa-chess-board"></i> Стратегические идеи для белых</h4>
+                <ul class="plan-list">
+                    <li>Борьба за центр с c4 и d4</li>
+                    <li>Создание пешечного превосходства в центре</li>
+                    <li>В принятом гамбите - быстрое развитие с целью вернуть пешку</li>
+                    <li>В ортодоксальной защите - медленная позиционная игра</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Защита Каро-Канн -->
+        <section id="caro_kann" class="theory-section">
+            <h2><i class="fas fa-chess-rook"></i> Защита Каро-Канн</h2>
+            <p>Солидный дебют черных против 1.e4, названный в честь английского шахматиста Хорацио Каро и австрийского шахматиста Маркуса Канна.</p>
+            
+            <div class="debut-variants">
+                <h3>Основные варианты</h3>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Классическая система</h4>
+                    <div class="variant-moves">1.e4 c6 2.d4 d5 3.♘c3 dxe4 4.♘xe4 ♝f5</div>
+                    <div class="variant-description">
+                        <p>Основной вариант, где черные развивают слона на f5 до хода e6.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 4...♝f5</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-caro-classical"></div>
+                                </div>
+                                <div class="board-caption">Классическая система Каро-Канн</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Вариант с 3...♘f6</h4>
+                    <div class="variant-moves">1.e4 c6 2.d4 d5 3.♘c3 ♘f6</div>
+                    <div class="variant-description">
+                        <p>Черные сразу атакуют центр, создавая напряжение.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 3...♘f6</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-caro-kf6"></div>
+                                </div>
+                                <div class="board-caption">Вариант с немедленным ♘f6</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="debut-plan">
+                <h4><i class="fas fa-chess-board"></i> Стратегические идеи для черных</h4>
+                <ul class="plan-list">
+                    <li>Подготовка к d5 без блокирования слона c8</li>
+                    <li>В классической системе - активное развитие слона на f5</li>
+                    <li>Солидная пешечная структура без слабостей</li>
+                    <li>Медленная позиционная игра</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Французская защита -->
+        <section id="french" class="theory-section">
+            <h2><i class="fas fa-flag"></i> Французская защита</h2>
+            <p>Популярный дебют черных, названный в честь французских шахматистов, которые успешно его применяли в 19 веке.</p>
+            
+            <div class="debut-variants">
+                <h3>Основные варианты</h3>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Классический вариант</h4>
+                    <div class="variant-moves">1.e4 e6 2.d4 d5 3.♘c3 ♘f6</div>
+                    <div class="variant-description">
+                        <p>Классическое продолжение с развитием коня на c3.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 3...♘f6</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-french-kc3"></div>
+                                </div>
+                                <div class="board-caption">Классическая система французской защиты</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Вариант Тарраша</h4>
+                    <div class="variant-moves">1.e4 e6 2.d4 d5 3.♘d2</div>
+                    <div class="variant-description">
+                        <p>Популярное продолжение, избегающее связки коня на c3.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 3.♘d2</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-french-kd2"></div>
+                                </div>
+                                <div class="board-caption">Система с ♘d2 (вариант Тарраша)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="debut-plan">
+                <h4><i class="fas fa-chess-board"></i> Стратегические идеи для черных</h4>
+                <ul class="plan-list">
+                    <li>Контригра на ферзевом фланге с c5</li>
+                    <li>Атака на пешечный центр белых</li>
+                    <li>Активная игра слоном c8 после c5 и dxc5</li>
+                    <li>В эндшпиле - использование пешечного большинства на ферзевом фланге</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Шотландская партия -->
+        <section id="scotch" class="theory-section">
+            <h2><i class="fas fa-chess-pawn"></i> Шотландская партия</h2>
+            <p>Старинный дебют, получивший популярность после матча между шотландскими и английскими шахматистами в 1824 году.</p>
+            
+            <div class="debut-variants">
+                <h3>Основные варианты</h3>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Классический вариант</h4>
+                    <div class="variant-moves">1.e4 e5 2.♘f3 ♘c6 3.d4 exd4</div>
+                    <div class="variant-description">
+                        <p>Основное продолжение - черные берут пешку d4.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 3...exd4</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-scotch-classical"></div>
+                                </div>
+                                <div class="board-caption">Классический вариант шотландской партии</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="variant">
+                    <h4><i class="fas fa-chevron-right"></i> Вариант с 4...♝c5</h4>
+                    <div class="variant-moves">1.e4 e5 2.♘f3 ♘c6 3.d4 exd4 4.♘xd4 ♝c5</div>
+                    <div class="variant-description">
+                        <p>Активное развитие слона черных с атакой на коня d4.</p>
+                        <div class="variant-board-container">
+                            <div>
+                                <div class="board-title">Позиция после 4...♝c5</div>
+                                <div class="theory-board-wrapper">
+                                    <div class="static-board-labels-vertical">
+                                        <span>8</span> <span>7</span> <span>6</span> <span>5</span> <span>4</span> <span>3</span> <span>2</span> <span>1</span>
+                                    </div>
+                                    <div class="static-board-labels-horizontal">
+                                        <span>a</span> <span>b</span> <span>c</span> <span>d</span> <span>e</span> <span>f</span> <span>g</span> <span>h</span>
+                                    </div>
+                                    <div class="static-chess-board" id="board-scotch-bc5"></div>
+                                </div>
+                                <div class="board-caption">Вариант с активным слоном на c5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="debut-plan">
+                <h4><i class="fas fa-chess-board"></i> Стратегические идеи для белых</h4>
+                <ul class="plan-list">
+                    <li>Быстрое открытие центра</li>
+                    <li>Использование преимущества в развитии</li>
+                    <li>В классическом варианте - игра против сдвоенных пешек черных</li>
+                    <li>Использование открытой d-линии</li>
+                </ul>
+            </div>
+        </section>
+        
+        <div class="notation-explanation" style="margin-top: 40px;">
+            <h4><i class="fas fa-graduation-cap"></i> Как изучать теорию дебютов</h4>
+            <ol>
+                <li><strong>Начните с основных идей</strong> - поймите стратегические цели дебюта</li>
+                <li><strong>Изучите 3-4 основных варианта</strong> - не нужно запоминать все возможные ходы</li>
+                <li><strong>Тренируйтесь на практике</strong> - используйте интерактивную доску на этом сайте</li>
+                <li><strong>Анализируйте свои партии</strong> - понимайте, где отошли от теории и почему</li>
+                <li><strong>Смотрите партии гроссмейстеров</strong> - изучайте, как играют данный дебют профессионалы</li>
+            </ol>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2026 Шахматные дебюты для начинающих</p>
+            <p style="margin-top: 10px; opacity: 0.8;">Сайт создан для обучения основам шахматных дебютов новичками</p>
+        </div>
+    </footer>
+    
+    <script>
+        const chessBoard = document.getElementById('chessBoard');
+        const movesList = document.getElementById('movesList');
+        const statusMessage = document.getElementById('statusMessage');
+        const challengeDescription = document.getElementById('challengeDescription');
+        
+        const mainPage = document.getElementById('mainPage');
+        const videosPage = document.getElementById('videosPage');
+        const theoryPage = document.getElementById('theoryPage');
+        const navItems = document.querySelectorAll('.nav-item');
+        const pages = document.querySelectorAll('.page');
+        
+        let gameState = {
+            board: {},
+            selectedCell: null,
+            moves: [],
+            lastMove: null,
+            currentChallenge: null
+        };
+        
+        const initialPieces = {
+            'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+            'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+            'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '♙', 'e2': '♙', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+            'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+        };
+        
+        const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        
+        const pieceNames = {
+            '♙': 'пешка', '♟': 'пешка',
+            '♘': 'конь', '♞': 'конь',
+            '♗': 'слон', '♝': 'слон',
+            '♖': 'ладья', '♜': 'ладья',
+            '♕': 'ферзь', '♛': 'ферзь',
+            '♔': 'король', '♚': 'король'
+        };
+        
+        const pieceColors = {
+            '♙': 'белая', '♘': 'белый', '♗': 'белый', '♖': 'белая', '♕': 'белый', '♔': 'белый',
+            '♟': 'черная', '♞': 'черный', '♝': 'черный', '♜': 'черная', '♛': 'черный', '♚': 'черный'
+        };
+        
+        function createMainStaticBoard(boardId, pieces) {
+            const board = document.getElementById(boardId);
+            if (!board) return;
+            board.innerHTML = '';
+            for (let row = 8; row >= 1; row--) {
+                for (let col = 0; col < 8; col++) {
+                    const cellId = `${files[col]}${row}`;
+                    const cell = document.createElement('div');
+                    cell.className = `debut-static-cell ${(row + col) % 2 === 0 ? 'dark' : 'light'}`;
+                    if (pieces[cellId]) cell.textContent = pieces[cellId];
+                    board.appendChild(cell);
+                }
+            }
+        }
+        
+        function createMainStaticBoards() {
+            createMainStaticBoard('main-italian-board', {
+                'a8': '♜', 'b8': '', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♞', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '♟', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '♗', 'd4': '', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '♘', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '♙', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '', 'g1': '', 'h1': '♖'
+            });
+            
+            createMainStaticBoard('main-sicilian-board', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '', 'd7': '♟', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '♟', 'd5': '', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '♙', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createMainStaticBoard('main-queen-gambit-board', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '♟', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '♙', 'd4': '♙', 'e4': '', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '', 'd2': '', 'e2': '♙', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createMainStaticBoard('main-caro-kann-board', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '', 'd7': '♟', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♟', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '♙', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createMainStaticBoard('main-french-board', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '', 'd6': '', 'e6': '♟', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '♙', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createMainStaticBoard('main-scotch-board', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♞', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '♟', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♙', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '♘', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '', 'h1': '♖'
+            });
+        }
+        
+        function createBoard() {
+            chessBoard.innerHTML = '';
+            gameState.board = JSON.parse(JSON.stringify(initialPieces));
+            gameState.selectedCell = null;
+            gameState.moves = [];
+            gameState.lastMove = null;
+            gameState.currentChallenge = null;
+            movesList.innerHTML = '';
+            hideStatusMessage();
+            challengeDescription.textContent = '';
+            
+            for (let row = 8; row >= 1; row--) {
+                for (let col = 0; col < 8; col++) {
+                    const cellId = `${files[col]}${row}`;
+                    const cell = document.createElement('div');
+                    cell.className = `chess-cell ${(row + col) % 2 === 0 ? 'dark' : 'light'} cell-border`;
+                    cell.id = cellId;
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    cell.dataset.file = files[col];
+                    cell.dataset.rank = row;
+                    if (gameState.board[cellId]) cell.textContent = gameState.board[cellId];
+                    cell.addEventListener('click', () => handleCellClick(cellId));
+                    chessBoard.appendChild(cell);
+                }
+            }
+            updateBoardVisuals();
+        }
+        
+        function handleCellClick(cellId) {
+            const piece = gameState.board[cellId];
+            if (gameState.selectedCell) {
+                if (gameState.selectedCell === cellId) {
+                    gameState.selectedCell = null;
+                    updateBoardVisuals();
+                    return;
+                }
+                makeMove(gameState.selectedCell, cellId);
+                return;
+            }
+            if (!piece) {
+                showStatusMessage("Выберите фигуру для перемещения", 'info');
+                return;
+            }
+            gameState.selectedCell = cellId;
+            updateBoardVisuals();
+        }
+        
+        function makeMove(from, to) {
+            const fromPiece = gameState.board[from];
+            gameState.board[to] = fromPiece;
+            gameState.board[from] = null;
+            
+            const fromCell = document.getElementById(from);
+            const toCell = document.getElementById(to);
+            
+            if (fromCell) {
+                fromCell.textContent = '';
+                const fromRow = parseInt(from[1]);
+                const fromCol = files.indexOf(from[0]);
+                fromCell.className = `chess-cell ${(fromRow + fromCol) % 2 === 0 ? 'dark' : 'light'} cell-border`;
+            }
+            
+            if (toCell) {
+                toCell.textContent = fromPiece;
+                const toRow = parseInt(to[1]);
+                const toCol = files.indexOf(to[0]);
+                toCell.className = `chess-cell ${(toRow + toCol) % 2 === 0 ? 'dark' : 'light'} cell-border`;
+            }
+            
+            gameState.lastMove = { from, to };
+            
+            const moveElement = document.createElement('div');
+            moveElement.className = 'move';
+            const moveContent = document.createElement('span');
+            moveContent.className = 'move-detail';
+            const pieceSpan = document.createElement('span');
+            pieceSpan.className = 'move-piece-icon';
+            pieceSpan.textContent = fromPiece;
+            const descSpan = document.createElement('span');
+            descSpan.textContent = ` ${from}→${to}`;
+            moveContent.appendChild(pieceSpan);
+            moveContent.appendChild(descSpan);
+            moveElement.appendChild(moveContent);
+            movesList.appendChild(moveElement);
+            
+            gameState.selectedCell = null;
+            updateBoardVisuals();
+            
+            if (gameState.currentChallenge) checkChallengeCompletion();
+        }
+        
+        function updateBoardVisuals() {
+            document.querySelectorAll('.chess-cell').forEach(cell => {
+                const row = parseInt(cell.id[1]);
+                const col = files.indexOf(cell.id[0]);
+                const isDark = (row + col) % 2 === 0;
+                cell.className = `chess-cell ${isDark ? 'dark' : 'light'} cell-border`;
+                const piece = gameState.board[cell.id];
+                cell.textContent = piece || '';
+            });
+            
+            if (gameState.selectedCell) {
+                const selectedCell = document.getElementById(gameState.selectedCell);
+                if (selectedCell) selectedCell.classList.add('selected');
+            }
+            
+            if (gameState.lastMove) {
+                const fromCell = document.getElementById(gameState.lastMove.from);
+                const toCell = document.getElementById(gameState.lastMove.to);
+                if (fromCell) fromCell.classList.add('last-move');
+                if (toCell) toCell.classList.add('last-move');
+            }
+        }
+        
+        function createStaticBoard(boardId, pieces) {
+            const board = document.getElementById(boardId);
+            if (!board) return;
+            board.innerHTML = '';
+            for (let row = 8; row >= 1; row--) {
+                for (let col = 0; col < 8; col++) {
+                    const cellId = `${files[col]}${row}`;
+                    const cell = document.createElement('div');
+                    cell.className = `static-chess-cell ${(row + col) % 2 === 0 ? 'dark' : 'light'}`;
+                    if (pieces[cellId]) cell.textContent = pieces[cellId];
+                    board.appendChild(cell);
+                }
+            }
+        }
+        
+        function createTheoryBoards() {
+            createStaticBoard('board-italian-classical', {
+                'a8': '♜', 'b8': '', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♞', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '♝', 'd5': '', 'e5': '♟', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '♗', 'd4': '', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '♘', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '♙', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '', 'g1': '', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-italian-evans', {
+                'a8': '♜', 'b8': '', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♞', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '♝', 'd5': '', 'e5': '♟', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '♙', 'c4': '♗', 'd4': '', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '♘', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '', 'c2': '♙', 'd2': '♙', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '', 'g1': '', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-italian-two-knights', {
+                'a8': '♜', 'b8': '', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♞', 'd6': '', 'e6': '', 'f6': '♞', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '♟', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '♗', 'd4': '', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '♘', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '♙', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '', 'g1': '', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-sicilian-najdorf', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '', 'h8': '♜',
+                'a7': '', 'b7': '♟', 'c7': '', 'd7': '', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '♟', 'b6': '', 'c6': '', 'd6': '♟', 'e6': '', 'f6': '♞', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♘', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '♘', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-sicilian-dragon', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '', 'd7': '', 'e7': '♟', 'f7': '♟', 'g7': '', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '', 'd6': '♟', 'e6': '', 'f6': '♞', 'g6': '♟', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♘', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '♘', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-sicilian-classical', {
+                'a8': '♜', 'b8': '', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '', 'd7': '', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♞', 'd6': '♟', 'e6': '', 'f6': '♞', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♘', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '♘', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-qg-declined', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '', 'd6': '', 'e6': '♟', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '♟', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '♙', 'd4': '♙', 'e4': '', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '', 'd2': '', 'e2': '♙', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-qg-accepted', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '♟', 'd4': '♙', 'e4': '', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '', 'd2': '', 'e2': '♙', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-slavic', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '', 'd7': '', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♟', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '♟', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '♙', 'd4': '♙', 'e4': '', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '', 'd2': '', 'e2': '♙', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-caro-classical', {
+                'a8': '♜', 'b8': '♞', 'c8': '', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '', 'd7': '', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♟', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '', 'f5': '♝', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♙', 'e4': '♘', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-caro-kf6', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '', 'd7': '', 'e7': '♟', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♟', 'd6': '', 'e6': '', 'f6': '♞', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '♟', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♙', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '♘', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-french-kc3', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '', 'd6': '', 'e6': '♟', 'f6': '♞', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '♟', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♙', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '♘', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-french-kd2', {
+                'a8': '♜', 'b8': '♞', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '', 'd6': '', 'e6': '♟', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '♟', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♙', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '♘', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '♘', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-scotch-classical', {
+                'a8': '♜', 'b8': '', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '♝', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♞', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '', 'd5': '', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♟', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '♘', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '', 'h1': '♖'
+            });
+            
+            createStaticBoard('board-scotch-bc5', {
+                'a8': '♜', 'b8': '', 'c8': '♝', 'd8': '♛', 'e8': '♚', 'f8': '', 'g8': '♞', 'h8': '♜',
+                'a7': '♟', 'b7': '♟', 'c7': '♟', 'd7': '♟', 'e7': '', 'f7': '♟', 'g7': '♟', 'h7': '♟',
+                'a6': '', 'b6': '', 'c6': '♞', 'd6': '', 'e6': '', 'f6': '', 'g6': '', 'h6': '',
+                'a5': '', 'b5': '', 'c5': '♝', 'd5': '', 'e5': '', 'f5': '', 'g5': '', 'h5': '',
+                'a4': '', 'b4': '', 'c4': '', 'd4': '♘', 'e4': '♙', 'f4': '', 'g4': '', 'h4': '',
+                'a3': '', 'b3': '', 'c3': '', 'd3': '', 'e3': '', 'f3': '', 'g3': '', 'h3': '',
+                'a2': '♙', 'b2': '♙', 'c2': '♙', 'd2': '', 'e2': '', 'f2': '♙', 'g2': '♙', 'h2': '♙',
+                'a1': '♖', 'b1': '♘', 'c1': '♗', 'd1': '♕', 'e1': '♔', 'f1': '♗', 'g1': '', 'h1': '♖'
+            });
+        }
+        
+        function showStatusMessage(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message status-${type}`;
+            statusMessage.style.display = 'block';
+            setTimeout(() => {
+                if (statusMessage.textContent === message) hideStatusMessage();
+            }, 3000);
+        }
+        
+        function hideStatusMessage() {
+            statusMessage.style.display = 'none';
+        }
+        
+        function checkChallengeCompletion() {
+            if (!gameState.currentChallenge) return;
+            let isComplete = false;
+            let message = '';
+            
+            switch (gameState.currentChallenge) {
+                case 'italian':
+                    const italianPositions = {'e4': '♙', 'e5': '♟', 'f3': '♘', 'c6': '♞', 'c4': '♗'};
+                    isComplete = Object.keys(italianPositions).every(p => gameState.board[p] === italianPositions[p]);
+                    message = isComplete ? 'Поздравляем! Вы успешно разыграли итальянскую партию!' : 'Продолжайте расставлять итальянскую партию: 1.e4 e5 2.♘f3 ♘c6 3.♗c4';
+                    break;
+                case 'sicilian':
+                    const sicilianPositions = {'e4': '♙', 'c5': '♟'};
+                    isComplete = Object.keys(sicilianPositions).every(p => gameState.board[p] === sicilianPositions[p]);
+                    message = isComplete ? 'Поздравляем! Вы успешно разыграли сицилианскую защиту!' : 'Продолжайте расставлять сицилианскую защиту: 1.e4 c5';
+                    break;
+                case 'queen_gambit':
+                    const queenGambitPositions = {'d4': '♙', 'd5': '♟', 'c4': '♙'};
+                    isComplete = Object.keys(queenGambitPositions).every(p => gameState.board[p] === queenGambitPositions[p]);
+                    message = isComplete ? 'Поздравляем! Вы успешно разыграли ферзевый гамбит!' : 'Продолжайте расставлять ферзевый гамбит: 1.d4 d5 2.c4';
+                    break;
+                case 'caro_kann':
+                    const caroKannPositions = {'e4': '♙', 'c6': '♟'};
+                    isComplete = Object.keys(caroKannPositions).every(p => gameState.board[p] === caroKannPositions[p]);
+                    message = isComplete ? 'Поздравляем! Вы успешно разыграли защиту Каро-Канн!' : 'Продолжайте расставлять защиту Каро-Канн: 1.e4 c6';
+                    break;
+                case 'french':
+                    const frenchPositions = {'e4': '♙', 'e6': '♟'};
+                    isComplete = Object.keys(frenchPositions).every(p => gameState.board[p] === frenchPositions[p]);
+                    message = isComplete ? 'Поздравляем! Вы успешно разыграли французскую защиту!' : 'Продолжайте расставлять французскую защиту: 1.e4 e6';
+                    break;
+                case 'scotch':
+                    const scotchPositions = {'e4': '♙', 'e5': '♟', 'f3': '♘', 'c6': '♞', 'd4': '♙'};
+                    isComplete = Object.keys(scotchPositions).every(p => gameState.board[p] === scotchPositions[p]);
+                    message = isComplete ? 'Поздравляем! Вы успешно разыграли шотландскую партию!' : 'Продолжайте расставлять шотландскую партию: 1.e4 e5 2.♘f3 ♘c6 3.d4';
+                    break;
+            }
+            
+            if (isComplete) {
+                showStatusMessage(message, 'success');
+                gameState.currentChallenge = null;
+                challengeDescription.textContent = '';
+            } else {
+                challengeDescription.textContent = message;
+            }
+        }
+        
+        function startChallenge(debutType) {
+            createBoard();
+            gameState.currentChallenge = debutType;
+            const messages = {
+                'italian': 'Задание: разыграйте итальянскую партию (1.e4 e5 2.♘f3 ♘c6 3.♗c4). Переместите фигуры на нужные клетки.',
+                'sicilian': 'Задание: разыграйте сицилианскую защиту (1.e4 c5). Переместите фигуры на нужные клетки.',
+                'queen_gambit': 'Задание: разыграйте ферзевый гамбит (1.d4 d5 2.c4). Переместите фигуры на нужные клетки.',
+                'caro_kann': 'Задание: разыграйте защиту Каро-Канн (1.e4 c6). Переместите фигуры на нужные клетки.',
+                'french': 'Задание: разыграйте французскую защиту (1.e4 e6). Переместите фигуры на нужные клетки.',
+                'scotch': 'Задание: разыграйте шотландскую партию (1.e4 e5 2.♘f3 ♘c6 3.d4). Переместите фигуры на нужные клетки.'
+            };
+            challengeDescription.textContent = messages[debutType];
+            showStatusMessage('Начато новое задание! Перемещайте фигуры на нужные клетки.', 'info');
+        }
+        
+        function checkCurrentPosition() {
+            const checks = [
+                { name: 'Итальянская партия', check: checkItalian },
+                { name: 'Сицилианская защита', check: checkSicilian },
+                { name: 'Ферзевый гамбит', check: checkQueenGambit },
+                { name: 'Защита Каро-Канн', check: checkCaroKann },
+                { name: 'Французская защита', check: checkFrench },
+                { name: 'Шотландская партия', check: checkScotch }
+            ];
+            let found = false;
+            for (const check of checks) {
+                if (check.check()) {
+                    showStatusMessage(`Вы разыграли ${check.name}!`, 'success');
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) showStatusMessage('Пока не удалось определить дебют. Попробуйте разыграть один из известных дебютов.', 'info');
+        }
+        
+        function checkItalian() {
+            const positions = {'e4': '♙', 'e5': '♟', 'f3': '♘', 'c6': '♞', 'c4': '♗'};
+            return Object.keys(positions).every(p => gameState.board[p] === positions[p]);
+        }
+        
+        function checkSicilian() {
+            const positions = {'e4': '♙', 'c5': '♟'};
+            return Object.keys(positions).every(p => gameState.board[p] === positions[p]);
+        }
+        
+        function checkQueenGambit() {
+            const positions = {'d4': '♙', 'd5': '♟', 'c4': '♙'};
+            return Object.keys(positions).every(p => gameState.board[p] === positions[p]);
+        }
+        
+        function checkCaroKann() {
+            const positions = {'e4': '♙', 'c6': '♟'};
+            return Object.keys(positions).every(p => gameState.board[p] === positions[p]);
+        }
+        
+        function checkFrench() {
+            const positions = {'e4': '♙', 'e6': '♟'};
+            return Object.keys(positions).every(p => gameState.board[p] === positions[p]);
+        }
+        
+        function checkScotch() {
+            const positions = {'e4': '♙', 'e5': '♟', 'f3': '♘', 'c6': '♞', 'd4': '♙'};
+            return Object.keys(positions).every(p => gameState.board[p] === positions[p]);
+        }
+        
+        function showHint() {
+            if (gameState.currentChallenge) {
+                const hints = {
+                    'italian': 'Подсказка: итальянская партия начинается с 1.e4 e5 2.♘f3 ♘c6 3.♗c4',
+                    'sicilian': 'Подсказка: сицилианская защита начинается с 1.e4 c5',
+                    'queen_gambit': 'Подсказка: ферзевый гамбит начинается с 1.d4 d5 2.c4',
+                    'caro_kann': 'Подсказка: защита Каро-Канн начинается с 1.e4 c6',
+                    'french': 'Подсказка: французская защита начинается с 1.e4 e6',
+                    'scotch': 'Подсказка: шотландская партия начинается с 1.e4 e5 2.♘f3 ♘c6 3.d4'
+                };
+                showStatusMessage(hints[gameState.currentChallenge], 'info');
+            } else {
+                showStatusMessage('Выберите задание из раздела "Практические задания" для получения подсказки.', 'info');
+            }
+        }
+        
+        function showPage(pageId) {
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId + 'Page').classList.add('active');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-page') === pageId) item.classList.add('active');
+            });
+            window.scrollTo(0, 0);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            createBoard();
+            createMainStaticBoards();
+            createTheoryBoards();
+            
+            document.getElementById('resetBtn').addEventListener('click', createBoard);
+            document.getElementById('hintBtn').addEventListener('click', showHint);
+            document.getElementById('checkBtn').addEventListener('click', checkCurrentPosition);
+            
+            document.querySelectorAll('.challenge-area button[data-debut]').forEach(button => {
+                button.addEventListener('click', function() {
+                    startChallenge(this.getAttribute('data-debut'));
+                });
+            });
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    if (pageId) showPage(pageId);
+                });
+            });
+            
+            document.querySelectorAll('.theory-nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        if (!theoryPage.classList.contains('active')) showPage('theory');
+                        setTimeout(() => window.scrollTo({ top: targetElement.offsetTop - 100, behavior: 'smooth' }), 100);
+                    }
+                });
+            });
+            
+            setTimeout(() => showStatusMessage('Добро пожаловать! Кликните на фигуру, затем на клетку, куда хотите её переместить.', 'info'), 1000);
+        });
+    </script>
+</body>
+</html>
